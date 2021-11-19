@@ -25,18 +25,23 @@ const Form = ({ input, setInput, task, setTask, editTask, setEditTask }) => {
     }, [setInput, editTask])
 
     const handleSetId = () => {
-        let id = task.length()
+        let id = task.length
         let newId = parseInt(id) + 1
-        return newId
+        // newId.toString()
+
+        return console.log(newId)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
+        let id = task.length
+        let newId = id + 1
+
         if(!editTask) {
             setTask([
                 ...task,
-                { id: handleSetId, title: input, description: "-", status: 0, createdAt: moment().format('YYYY-MM-DD HH:mm') }
+                { id: newId, title: input, description: "-", status: 0, createdAt: moment().format('YYYY-MM-DD HH:mm') }
             ])
             setInput("")
         } else {

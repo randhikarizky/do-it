@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
+import dataAction from '../redux/action/action'
 
 import Form from '../components/form'
 import List from '../components/list'
@@ -12,9 +15,20 @@ function Index() {
     const [task, setTask] = useState([])
     const [editTask, setEditTask] = useState(null)
 
+    const dispatch = useDispatch()
+    const dataMock = useSelector((state) => state.dataApi)
+
     useEffect(() => {
         localStorage.setItem('task', JSON.stringify(task))
     }, [task])
+
+    useEffect(() => {
+        dispatch(dataAction.fetchData())
+    }, [dispatch])
+
+    useEffect(() => {
+        setTask([ ...dataMock ])
+    }, [setTask, dataMock])
 
     return (
         <>
