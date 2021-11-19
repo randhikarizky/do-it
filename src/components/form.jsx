@@ -1,12 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import moment from 'moment'
 
-const Form = ({ input, setInput, task, setTask }) => {
+const Form = ({ input, setInput, task, setTask, editTask, setEditTask }) => {
     
     const handleTextInput = (e) => {
         setInput(e.target.value)
     }
+
+    const updateTask = (title, id, status) => {
+        const newTask = task.map((item) => 
+            item.id === id ? { title, id, status } : item
+        )
+        setTask(newTask)
+        setEditTask("")
+    }
+
+    useEffect(() => {
+        if(editTask) {
+            setInput(editTask.title)
+        } else {
+            setInput("")
+        }
+    }, [setInput, editTask])
 
     const handleSetId = () => {
         let id = task.length()
@@ -16,11 +32,16 @@ const Form = ({ input, setInput, task, setTask }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        setTask([
-            ...task,
-            { id: handleSetId, title: input, description: "-", status: 0, createdAt: moment().format('YYYY-MM-DD HH:mm') }
-        ])
-        setInput("")
+
+        if(!editTask) {
+            setTask([
+                ...task,
+                { id: handleSetId, title: input, description: "-", status: 0, createdAt: moment().format('YYYY-MM-DD HH:mm') }
+            ])
+            setInput("")
+        } else {
+            updateTask(input, editTask.id, editTask.status)
+        }
     }
 
     return (
@@ -36,7 +57,7 @@ const Form = ({ input, setInput, task, setTask }) => {
                         onChange={handleTextInput}
                     />
                     <button className="btn btn-success btn-add" type="submit">
-                        <i className="fas fa-plus"></i>
+                        {editTask ? 'Save' : <i className="fas fa-plus"></i>}
                     </button>
                 </div>
             </form>

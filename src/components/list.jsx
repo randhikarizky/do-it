@@ -1,32 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+
+import dataAction from '../redux/action/action'
 
 import Modal from 'react-modal'
 
 // Modal.setAppElement('#container-fluid')
 
-const List = ({ task, setTask, editTask, setEditTask }) => {
+const List = ({ task, setTask, setEditTask }) => {
+
+    const dispatch = useDispatch()
 
     const [ taskEditData, setTaskEditData ] = useState({})
     const [ isModalOpen, setIsModalOpen ] = useState(false)
 
-    const handleSetEditTaskData = (item) => {
-        setTaskEditData({
-            id: item.id,
-            title: item.title,
-            description: item.description,
-            status: item.status,
-            createdAt: item.createdAt
-        })
+    const dataMock = useSelector((state) => state.dataApi )
+    
+    useEffect(() => {
+        dispatch(dataAction.fetchData())
+    }, [dispatch])
 
-        return console.log(taskEditData)
-    }
+    // useEffect(() => {
+    //     setTask(...task, dataMock)
+    // })
 
     const handleDelete = ({ id }) => {
         setTask(task.filter((item) => item.id !== id ))
     }
 
     const handleEdit = ({ id }) => {
-        const findTask = task.find((item) => task.id === id )
+        const findTask = task.find((item) => item.id === id )
         setEditTask(findTask)
     }
 
@@ -35,6 +38,17 @@ const List = ({ task, setTask, editTask, setEditTask }) => {
             task.map((list) => {
                 if(list.id === item.id) {
                     return { ...list, status: 1}
+                }
+                return list
+            })
+        )
+    }
+
+    const handleUncomplete = (item) => {
+        setTask(
+            task.map((list) => {
+                if(list.id === item.id) {
+                    return { ...list, status: 0 }
                 }
                 return list
             })
@@ -59,6 +73,9 @@ const List = ({ task, setTask, editTask, setEditTask }) => {
                                         <button className="btn btn-outline-success" onClick={() => handleComplete(item)}>
                                             <i className="fas fa-check"></i>
                                         </button>
+                                        <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
+                                            <i className="fas fa-edit"></i>
+                                        </button>
                                         <button className="btn btn-outline-danger" onClick={() => handleDelete(item)}>
                                             <i className="fas fa-trash"></i>
                                         </button>
@@ -79,8 +96,11 @@ const List = ({ task, setTask, editTask, setEditTask }) => {
                                         <button className="btn btn-success" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
                                             {item.title}
                                         </button>
-                                        <button className="btn btn-outline-success" onClick={() => handleComplete(item)}>
-                                            <i className="fas fa-check"></i>
+                                        <button className="btn btn-outline-secondary" onClick={() => handleUncomplete(item)}>
+                                            <i className="fas fa-times"></i>
+                                        </button>
+                                        <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
+                                            <i className="fas fa-edit"></i>
                                         </button>
                                         <button className="btn btn-outline-danger" disabled>
                                             <i className="fas fa-trash"></i>

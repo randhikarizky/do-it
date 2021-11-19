@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Form from '../components/form'
 import List from '../components/list'
@@ -7,9 +7,14 @@ import "../style/index.css"
 
 function Index() {
 
+    const initialState = JSON.parse(localStorage.getItem('task')) || []
     const [input, setInput] = useState("")
     const [task, setTask] = useState([])
     const [editTask, setEditTask] = useState(null)
+
+    useEffect(() => {
+        localStorage.setItem('task', JSON.stringify(task))
+    }, [task])
 
     return (
         <>
@@ -28,13 +33,14 @@ function Index() {
                                     setInput={setInput}
                                     task={task}
                                     setTask={setTask}
+                                    editTask={editTask}
+                                    setEditTask={setEditTask}
                                 />
                             </div>
                             <div className="row">
                                 <List
                                     task={task}
                                     setTask={setTask}
-                                    editTask={editTask}
                                     setEditTask={setEditTask}
                                 />
                             </div>
