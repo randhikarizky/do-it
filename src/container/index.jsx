@@ -55,6 +55,7 @@ const Index = () => {
                                 <List
                                     task={task}
                                     setTask={setTask}
+                                    editTask={editTask}
                                     setEditTask={setEditTask}
                                 />
                             </div>
