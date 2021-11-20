@@ -13,8 +13,8 @@ const fetchData = () => async (dispatch) => {
             type: FETCH_DATA,
             payload: response.data
         })
-    } catch (ex) {
-        console.log(ex)
+    } catch (err) {
+        console.log(err)
     }
 }
 

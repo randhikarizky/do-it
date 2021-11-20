@@ -24,14 +24,6 @@ const Form = ({ input, setInput, task, setTask, editTask, setEditTask }) => {
         }
     }, [setInput, editTask])
 
-    const handleSetId = () => {
-        let id = task.length
-        let newId = parseInt(id) + 1
-        // newId.toString()
-
-        return console.log(newId)
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault()
 
@@ -52,6 +44,7 @@ const Form = ({ input, setInput, task, setTask, editTask, setEditTask }) => {
     return (
         <>
             <form onSubmit={handleSubmit}>
+                <h3>Create new task</h3>
                 <div className="input-group">
                     <input
                         type="text"
@@ -62,7 +55,7 @@ const Form = ({ input, setInput, task, setTask, editTask, setEditTask }) => {
                         onChange={handleTextInput}
                     />
                     <button className="btn btn-success btn-add" type="submit">
-                        {editTask ? 'Save' : <i className="fas fa-plus"></i>}
+                        { editTask ? 'Save' : <i className="fas fa-plus"></i> }
                     </button>
                 </div>
             </form>

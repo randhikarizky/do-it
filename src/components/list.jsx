@@ -1,18 +1,9 @@
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-
-import dataAction from '../redux/action/action'
+import moment from 'moment'
+import React, { useState } from 'react'
 
 const List = ({ task, setTask, setEditTask }) => {
 
-    const dispatch = useDispatch()
-
-    const dataMock = useSelector((state) => state.dataApi)
-
-
-    useEffect(() => {
-        dispatch(dataAction.fetchData())
-    }, [dispatch])
+    const [ sortedArray, setSortedArray] = useState([])
 
     const handleDelete = ({ id }) => {
         setTask(task.filter((item) => item.id !== id ))
@@ -45,33 +36,72 @@ const List = ({ task, setTask, setEditTask }) => {
         )
     }
 
+    const sortArray = (status) => {
+        let sorted = task.sort((a, b) => new moment(a.date).format('YYYYMMDD HH:mm') - new moment(b.date).format('YYYYMMDD HH:mm'))
+        let reversed = sorted.reverse()
+
+        switch(status) {
+            case 0 :
+                return {
+                    content: (
+                        sorted.map((item) => (
+                            item.status === 0 ?
+                                <div className="btn-group" role="group" key={item.id} style={{ marginBottom: '1vh' }}>
+                                    <button className="btn btn-outline-primary" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
+                                        {item.title}
+                                    </button>
+                                    <button className="btn btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" onClick={() => handleComplete(item)}>
+                                        <i className="fas fa-check"></i>
+                                    </button>
+                                    <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
+                                        <i className="fas fa-edit"></i>
+                                    </button>
+                                    <button className="btn btn-outline-danger" onClick={() => handleDelete(item)}>
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                : ''
+                        ))
+                    )
+                }
+            case 1 :
+                return {
+                    content: (
+                        reversed.map((item) => (
+                            item.status === 1 ?
+                                <div className="btn-group" role="group" key={item.id} style={{ marginBottom: '1vh' }}>
+                                    <button className="btn btn-secondary" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
+                                        {item.title}
+                                    </button>
+                                    <button className="btn btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" onClick={() => handleUncomplete(item)}>
+                                        <i className="fas fa-check"></i>
+                                    </button>
+                                    <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
+                                        <i className="fas fa-edit"></i>
+                                    </button>
+                                    <button className="btn btn-outline-danger" disabled>
+                                        <i className="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                                : ''
+                        ))
+                    )
+                }
+            default:
+                return sorted
+        }
+    }
+
     return (
         <>
-            <div className="list-container" id="container-fluid">
+            <div className="list-container">
                 <div className="row progress-container">
                     <h3>
                         On going tasks
                     </h3>
                     <div className="list-group">
                         {
-                            task.map((item) => (
-                                item.status !== 1 ?
-                                    <div className="btn-group" role="group" key={item.id} style={{ marginBottom: '1vh' }}>
-                                        <button className="btn btn-outline-primary" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
-                                            {item.title}
-                                        </button>
-                                        <button className="btn btn-outline-success" onClick={() => handleComplete(item)}>
-                                            <i className="fas fa-check"></i>
-                                        </button>
-                                        <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
-                                            <i className="fas fa-edit"></i>
-                                        </button>
-                                        <button className="btn btn-outline-danger" onClick={() => handleDelete(item)}>
-                                            <i className="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                    : ''
-                            ))
+                            sortArray(0).content
                         }
                     </div>
                 </div>
@@ -80,24 +110,7 @@ const List = ({ task, setTask, setEditTask }) => {
                         Completed tasks
                     </h3>
                         {
-                            task.map((item) => (
-                                item.status === 1 ?
-                                    <div className="btn-group" role="group" key={item.id} style={{ marginBottom: '1vh' }}>
-                                        <button className="btn btn-success" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
-                                            {item.title}
-                                        </button>
-                                        <button className="btn btn-outline-secondary" onClick={() => handleUncomplete(item)}>
-                                            <i className="fas fa-times"></i>
-                                        </button>
-                                        <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
-                                            <i className="fas fa-edit"></i>
-                                        </button>
-                                        <button className="btn btn-outline-danger" disabled>
-                                            <i className="fas fa-trash"></i>
-                                        </button>
-                                    </div>
-                                : ''
-                            ))
+                            sortArray(1).content
                         }
                 </div>
             </div>

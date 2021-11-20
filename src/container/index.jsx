@@ -8,7 +8,7 @@ import List from '../components/list'
 
 import "../style/index.css"
 
-function Index() {
+const Index = () => {
 
     const initialState = JSON.parse(localStorage.getItem('task')) || []
     const [input, setInput] = useState("")
