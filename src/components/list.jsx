@@ -70,11 +70,11 @@ const List = ({ task, setTask, setEditTask }) => {
                         reversed.map((item) => (
                             item.status === 1 ?
                                 <div className="btn-group" role="group" key={item.id} style={{ marginBottom: '1vh' }}>
-                                    <button className="btn btn-secondary" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
+                                    <button className="btn btn-primary" style={{ width: '150%', textAlign: 'left', fontWeight: 'bold' }}>
                                         {item.title}
                                     </button>
-                                    <button className="btn btn-outline-success" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" onClick={() => handleUncomplete(item)}>
-                                        <i className="fas fa-check"></i>
+                                    <button className="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" onClick={() => handleUncomplete(item)}>
+                                        <i className="fas fa-times"></i>
                                     </button>
                                     <button className="btn btn-outline-primary" onClick={() => handleEdit(item)}>
                                         <i className="fas fa-edit"></i>
