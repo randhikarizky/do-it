@@ -3,8 +3,6 @@ import React, { useState } from 'react'
 
 const List = ({ task, setTask, setEditTask }) => {
 
-    const [ sortedArray, setSortedArray] = useState([])
-
     const handleDelete = ({ id }) => {
         setTask(task.filter((item) => item.id !== id ))
     }
